@@ -20,12 +20,15 @@ public static class Utilities
 
         var upToStart = contents.Substring(contents.IndexOf(before) + before.Length);
 
-        return upToStart.Substring(0, upToStart.IndexOf(after));
+        if (upToStart.Contains(after))
+            return upToStart.Substring(0, upToStart.IndexOf(after));
+        else
+            return upToStart;
     }
 
-    public static Dictionary<string, dynamic> Items(string contents, string itemPatern, string itemLabel, Func<string, string> getId, Dictionary<string, Func<string, dynamic>> actions)
+    public static Dictionary<string, string> Items(string contents, string itemPatern, string itemLabel, Func<string, string> getId, Dictionary<string, Func<string, string>> actions)
     {
-        var ans = new Dictionary<string, dynamic>();
+        var ans = new Dictionary<string, string>();
         var pattern = new Regex(itemPatern, RegexOptions.Multiline | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         var matches = pattern.Matches(contents).ToList();
@@ -40,7 +43,7 @@ public static class Utilities
             var id = getId(matchContents.Value);
             foreach (var action in actions)
             {
-                ans.Add($"{itemLabel} {id}: {action.Key}", action.Value(matchContents.Value));
+                ans.Add($"[{itemLabel} {id}] {action.Key}", action.Value(matchContents.Value));
             }
         }
         return ans;
