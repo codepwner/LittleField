@@ -7,12 +7,12 @@ using static Fetch;
 
 public static class Data
 {
-    public static void Reset()
+    public static void Refresh()
     {
-        _demand = null;
-        _base = null;
-        _standings = null;
-        _queues = null;
+        _demand = GetPlot(Fetch.Stations.JOBIN);
+        _base = GetBase();
+        _standings = Position.Current;
+        _queues = GetQueues();
         //_contracts = null;
     }
 

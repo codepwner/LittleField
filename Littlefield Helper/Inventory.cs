@@ -17,7 +17,8 @@ public class Inventory
 
     public override string ToString()
     {
-        return $"  >> Recommended Safety Stock: {SafetyStock:F0} kits\n"
+        return $"  >> Inventory Position: {CurrentPosition:F0} kits\n"
+            + $"  >> Recommended Safety Stock: {SafetyStock:F0} kits\n"
             + $"  >> Optimal Order Quantity: {OptimalOrderQuantity:F0} kits [Currently: {OrderUpToLevel:F0}]\n"
             + $"  >> Optimal Effective Unit Cost: {EffectiveUnitPrice(OptimalOrderQuantity):C2} [Currently: {EffectiveUnitPrice(OrderUpToLevel):C2}]\n";
     }

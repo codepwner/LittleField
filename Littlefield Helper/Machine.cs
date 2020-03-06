@@ -2,20 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Fetch;
 using static Utilities;
 
 public class Machine
 {
-    public Machine (int id, List<Process> processes)
+    public Machine (int id, Stations queue, Stations utilization, List<Process> processes)
     {
         ID = id;
         Processes = processes;
+        Queue = queue;
+        Utilization = utilization;
     }
     public int ID { get; private set; }
     public int Cost => AsInt(Extract(Data.Base[$"[S{ID}] Purchase Price"], "$ "));
-    public int Salvage => AsInt(Data.Base[$"[S{ID}] Retirement Price"]);
+    public int Salvage => AsInt(Extract(Data.Base[$"[S{ID}] Retirement Price"], "$ "));
     public int LeadTime => AsInt(Data.Base[$"[S{ID}] Purchase lead time"]);
     public List<Process> Processes { get; private set; }
+    public Stations Queue { get; set; }
+    public Stations Utilization { get; set; }
 
     // in days
     public double FlowTime(Situation situation)

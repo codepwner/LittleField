@@ -60,14 +60,32 @@ public class Situation
                 {
                     Contract = contract,
                     Splits = split,
-                    MachineCount = new Dictionary<int, int>
-                    {
-                        {1,1},
-                        {2,1},
-                        {3,1}
+                    MachineCount = CurrentMachineCounts
+                });
+                situations.Add(new Situation
+                {
+                    Contract = contract,
+                    Splits = split,
+                    MachineCount = new Dictionary<int, int> { 
+                        { 1,1 },
+                        { 2,1 },
+                        { 3,1 }
                     }
                 });
             }
+        }
+        foreach(var machine in line.Machines)
+        {
+            var sit = new Situation
+            {
+                Contract = Current.Contract,
+                Splits = Current.Splits,
+                MachineCount = CurrentMachineCounts
+            };
+
+            sit.MachineCount[machine.ID]++;
+
+            situations.Add(sit);
         }
 
         var items = new List<dynamic>();
@@ -115,6 +133,11 @@ public class Situation
         {
             var delta = Math.Max(0, machine.Value - CurrentMachineCounts[machine.Key]);
             cost += delta * line.Machines[machine.Key - 1].Cost;
+        }
+        foreach (var machine in MachineCount)
+        {
+            var delta = Math.Max(0, CurrentMachineCounts[machine.Key] - machine.Value);
+            cost -= delta * line.Machines[machine.Key - 1].Salvage;
         }
         return cost;
     }
